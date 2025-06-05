@@ -44,3 +44,17 @@ export const getQueuePrioritas = async (req, res) => {
     return res.status(500).json(error);
   }
 };
+
+export const deleteQueue = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const queue = await Queue.findByPk(id);
+
+    await queue.destroy();
+
+    return res.status(200).json({ message: 'Berhasil Menghapus antrian' });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
