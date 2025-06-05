@@ -13,6 +13,6 @@ const router = express.Router();
 router.get('/umum', getQueueUmum);
 router.get('/prioritas', getQueuePrioritas);
 router.post('/create', validateData(queueSchema), createQueue);
-router.delete('/delele/:id', deleteQueue);
+router.delete('/delete/:id', deleteQueue);
 
 export default router;
