@@ -8,6 +8,19 @@ const queueSchema = z.object({
   kategori: z.enum(['prioritas', 'umum'], {
     message: "Kategori harus 'prioritas' atau 'umum'",
   }),
+  jenis_layanan: z.enum(
+    [
+      'pembuatan ktp',
+      'pembuatan kartu keluarga',
+      'akta kelahiran',
+      'akta kematian',
+      'layanan lainnya',
+    ],
+    {
+      message:
+        "Kategori harus 'pembuatan ktp','pembuatan kartu keluarga','akta kelahiran','akta kematian', atau 'layanan lainnya',",
+    }
+  ),
 });
 
 export { queueSchema };

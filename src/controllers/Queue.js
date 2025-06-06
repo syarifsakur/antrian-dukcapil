@@ -2,7 +2,7 @@ import Queue from '../models/ModelQueue.js';
 import { Op } from 'sequelize';
 
 export const createQueue = async (req, res) => {
-  const { nama, nik, alamat, telepon, kategori } = req.body;
+  const { nama, nik, alamat, telepon, kategori, jenis_layanan } = req.body;
   try {
     await Queue.create({
       nama,
@@ -10,6 +10,7 @@ export const createQueue = async (req, res) => {
       alamat,
       telepon,
       kategori,
+      jenis_layanan,
     });
 
     return res.status(201).json({ message: 'Berhasil Menambah Antrian' });
@@ -47,6 +48,54 @@ export const getQueuePrioritas = async (req, res) => {
     });
 
     return res.status(200).json({ response });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
+export const getStatistikQueue = async (req, res) => {
+  try {
+    const { count: total_pengunjung } = await Queue.findAndCountAll();
+    const { count: total_selesai } = await Queue.findAndCountAll({
+      where: {
+        status: 'selesai',
+      },
+    });
+    const { count: ktp } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'pembuatan ktp',
+      },
+    });
+    const { count: akta_kelahiran } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'akta kelahiran',
+      },
+    });
+    const { count: akta_kematian } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'akta kematian',
+      },
+    });
+    const { count: kk } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'pembuatan kartu keluarga',
+      },
+    });
+    const { count: layanan_lainnya } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'layanan lainnya',
+      },
+    });
+
+    return res.status(200).json({
+      total_pengunjung,
+      total_selesai,
+      ktp,
+      akta_kelahiran,
+      akta_kematian,
+      kk,
+      layanan_lainnya,
+    });
   } catch (error) {
     return res.status(500).json(error);
   }

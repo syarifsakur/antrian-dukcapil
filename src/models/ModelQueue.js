@@ -38,6 +38,16 @@ const Queue = db.define(
       allowNull: true,
       defaultValue: 'menunggu',
     },
+    jenis_layanan: {
+      type: DataTypes.ENUM(
+        'pembuatan ktp',
+        'pembuatan kartu keluarga',
+        'akta kelahiran',
+        'akta kematian',
+        'layanan lainnya'
+      ),
+      allowNull: true,
+    },
   },
   {
     freezeTableName: true,
