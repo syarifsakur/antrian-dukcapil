@@ -5,8 +5,8 @@ const queueSchema = z.object({
   nik: z.string().length(16, { message: 'NIK harus terdiri dari 16 karakter' }),
   alamat: z.string().min(1, { message: 'Alamat harus diisi' }),
   telepon: z.string().min(1, 'NO HP Harus di isi!'),
-  status: z.enum(['prioritas', 'umum'], {
-    message: "Status harus 'prioritas' atau 'umum'",
+  kategori: z.enum(['prioritas', 'umum'], {
+    message: "Kategori harus 'prioritas' atau 'umum'",
   }),
 });
 

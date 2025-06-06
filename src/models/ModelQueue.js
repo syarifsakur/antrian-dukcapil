@@ -29,9 +29,14 @@ const Queue = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    status: {
+    kategori: {
       type: DataTypes.ENUM('prioritas', 'umum'),
       allowNull: true,
+    },
+    status: {
+      type: DataTypes.ENUM('menunggu', 'proses', 'selesai'),
+      allowNull: true,
+      defaultValue: 'menunggu',
     },
   },
   {

@@ -5,6 +5,8 @@ import {
   deleteQueue,
   getQueuePrioritas,
   getQueueUmum,
+  riwayatQueue,
+  updateStatus,
 } from '../controllers/Queue.js';
 import { queueSchema } from '../validations/SchemaQueue.js';
 
@@ -12,7 +14,9 @@ const router = express.Router();
 
 router.get('/umum', getQueueUmum);
 router.get('/prioritas', getQueuePrioritas);
+router.get('/riwayat', riwayatQueue);
 router.post('/create', validateData(queueSchema), createQueue);
+router.patch('/update/:id', updateStatus);
 router.delete('/delete/:id', deleteQueue);
 
 export default router;
