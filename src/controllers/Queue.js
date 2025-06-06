@@ -40,7 +40,9 @@ export const getQueuePrioritas = async (req, res) => {
     const response = await Queue.findAll({
       where: {
         kategori: 'prioritas',
-        status: 'menunggu',
+        status: {
+          [Op.or]: ['menunggu', 'proses'],
+        },
       },
     });
 
