@@ -3,11 +3,12 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
-import createModel from './models/ModelQueue.js';
+import createModel from './models/ModelAdmin.js';
 
 // Functions
 import db from './configs/Database.js';
 import RouteQueue from './routers/RouterQueue.js';
+import RouteAuth from './routers/RouterAuth.js';
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ try {
   await db.authenticate();
   console.log('Database connected');
   // await db.sync({ alter: true });
-  //   createModel.sync({ alter: true });
+  // createModel.sync({ alter: true });
 } catch (error) {
   console.log(error);
 }
@@ -34,6 +35,7 @@ app.use(cookieParser());
 
 // End Point Api
 app.use('/queue', RouteQueue);
+app.use('/auth', RouteAuth);
 
 app.get('/', (req, res) => {
   return res.status(200).json({ message: 'welcome to my app' });
