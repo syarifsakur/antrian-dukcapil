@@ -4,7 +4,7 @@ import { Op } from 'sequelize';
 export const createQueue = async (req, res) => {
   const { nama, nik, alamat, telepon, kategori, jenis_layanan } = req.body;
   try {
-    await Queue.create({
+    const response = await Queue.create({
       nama,
       nik,
       alamat,
@@ -13,7 +13,9 @@ export const createQueue = async (req, res) => {
       jenis_layanan,
     });
 
-    return res.status(201).json({ message: 'Berhasil Menambah Antrian' });
+    return res
+      .status(201)
+      .json({ message: 'Berhasil Menambah Antrian', response });
   } catch (error) {
     return res.status(500).json(error);
   }
