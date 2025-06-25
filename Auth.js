@@ -2,23 +2,6 @@ import jwt from 'jsonwebtoken';
 import Admin from '../models/ModelAdmin.js';
 import bcrypt from 'bcryptjs';
 
-export const Register = async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    await Admin.create({
-      username,
-      password: hashedPassword,
-    });
-
-    return res.status(201).json({ message: 'Berhasil membuat akun!' });
-  } catch (error) {
-    return res.status(500).json(error);
-  }
-};
-
 export const Login = async (req, res) => {
   const { username, password } = req.body;
 

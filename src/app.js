@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import seedAdminData from './dummy.js/admin.js';
 
 import createModel from './models/ModelAdmin.js';
 
@@ -19,17 +20,13 @@ try {
   console.log('Database connected');
   // await db.sync({ alter: true });
   // createModel.sync({ alter: true });
+  await seedAdminData();
 } catch (error) {
   console.log(error);
 }
 
 app.use(express.json());
-app.use(
-  cors({
-    credentials: true,
-    origin: ['http://localhost:5173/'],
-  })
-);
+app.use(cors());
 
 app.use(cookieParser());
 

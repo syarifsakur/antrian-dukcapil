@@ -1,6 +1,11 @@
 import jwt from 'jsonwebtoken';
 import Admin from '../models/ModelAdmin.js';
 
+const user = {
+  id: '9f1b5c2e-67a3-4b31-b62e-5903dcb2a9c1',
+  username: 'admin',
+  password: 'admin123',
+};
 const verifyToken = async (req, res, next) => {
   try {
     const authHeader = req.headers['authorization'];
@@ -11,16 +16,8 @@ const verifyToken = async (req, res, next) => {
 
     if (!token) return res.status(401).json({ message: 'Token not found!' });
 
-    const user = await Admin.findOne({
-      where: { token },
-    });
-
-    if (!user) return res.status(401).json({ message: 'Invalid token!' });
-
     jwt.verify(token, process.env.ACCESS_SECRET_TOKEN, async (err, decoded) => {
       if (err) {
-        await Admin.update({ token: null }, { where: { uuid: user.uuid } });
-
         res.clearCookie('token');
         return res
           .status(403)
@@ -28,7 +25,6 @@ const verifyToken = async (req, res, next) => {
       }
 
       req.userId = decoded.userId;
-      req.name = user.fullname;
 
       next();
     });

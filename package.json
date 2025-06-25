@@ -4,7 +4,7 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon app"
   },
   "keywords": [],
@@ -24,5 +24,12 @@
     "nodemon": "^3.1.10",
     "sequelize": "^6.37.7",
     "zod": "^3.25.51"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "babel-jest": "^30.0.2",
+    "jest": "^30.0.2",
+    "supertest": "^7.1.1"
   }
 }

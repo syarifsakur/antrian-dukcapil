@@ -97,6 +97,7 @@ export const getStatistikQueue = async (req, res) => {
       layanan_lainnya,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 };
