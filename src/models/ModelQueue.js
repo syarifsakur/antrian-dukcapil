@@ -48,6 +48,10 @@ const Queue = db.define(
       ),
       allowNull: true,
     },
+    reason: {
+      type: DataTypes.ENUM('perubahan data', 'rusak', 'hilang', 'luar daerah'),
+      allowNull: true,
+    },
   },
   {
     freezeTableName: true,

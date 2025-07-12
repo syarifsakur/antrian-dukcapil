@@ -4,18 +4,41 @@ import { Op } from 'sequelize';
 export const createQueue = async (req, res) => {
   const { nama, nik, alamat, telepon, kategori, jenis_layanan } = req.body;
   try {
-    const response = await Queue.create({
-      nama,
-      nik,
-      alamat,
-      telepon,
-      kategori,
-      jenis_layanan,
-    });
+    if (jenis_layanan !== 'pembuatan ktp') {
+      Queue.create({
+        nama,
+        nik,
+        alamat,
+        telepon,
+        kategori,
+        jenis_layanan,
+      });
 
-    return res
-      .status(201)
-      .json({ message: 'Berhasil Menambah Antrian', response });
+      return res.status(201).json({ message: 'Berhasil Menambah Antrian!' });
+    } else {
+      const { reason } = req.body;
+      if (!reason) {
+        return res.status(400).json({ message: 'alasan harus ada!' });
+      }
+      if (
+        !['perubahan data', 'rusak', 'hilang', 'luar daerah'].includes(reason)
+      ) {
+        return res.status(400).json({
+          message:
+            "alasan harus antara 'perubahan data', 'rusak', 'hilang', 'luar daerah'",
+        });
+      }
+      Queue.create({
+        nama,
+        nik,
+        alamat,
+        telepon,
+        kategori,
+        jenis_layanan,
+        reason,
+      });
+    }
+    return res.status(201).json({ message: 'Berhasil Menambah Antrian!' });
   } catch (error) {
     return res.status(500).json(error);
   }

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import seedAdminData from './dummy.js/admin.js';
 
-import createModel from './models/ModelAdmin.js';
+import createModel from './models/ModelQueue.js';
 
 // Functions
 import db from './configs/Database.js';
