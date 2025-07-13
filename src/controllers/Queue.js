@@ -1,3 +1,4 @@
+import { date } from 'zod/v4';
 import Queue from '../models/ModelQueue.js';
 import { Op } from 'sequelize';
 
@@ -15,7 +16,7 @@ export const createQueue = async (req, res) => {
         telepon,
         kategori,
         jenis_layanan,
-        color: '#292794',
+        color: '#ffff',
         date: new Date(),
       });
     } else {
@@ -30,24 +31,42 @@ export const createQueue = async (req, res) => {
             "Alasan harus antara 'perubahan data', 'rusak', 'hilang', 'luar daerah'",
         });
       }
-      response = await Queue.create({
-        nama,
-        nik,
-        alamat,
-        telepon,
-        kategori,
-        jenis_layanan,
-        reason,
-        color: '#292794',
-        date: new Date(),
+      if (reason === 'perubahan data') {
+        response = await Queue.create({
+          nama,
+          nik,
+          alamat,
+          telepon,
+          kategori,
+          jenis_layanan,
+          reason,
+          color: '#ffffff',
+          date: new Date(),
+        });
+        return res.status(201).json({
+          message: 'Berhasil Menambah Antrian!',
+          uuid: response.uuid,
+        });
+      } else {
+        response = await Queue.create({
+          nama,
+          nik,
+          alamat,
+          telepon,
+          kategori,
+          jenis_layanan,
+          reason,
+          color: '#292794',
+          date: new Date(),
+        });
+      }
+
+      console.log(response.uuid);
+      return res.status(201).json({
+        message: 'Berhasil Menambah Antrian!',
+        uuid: response.uuid,
       });
     }
-
-    console.log(response.uuid);
-    return res.status(201).json({
-      message: 'Berhasil Menambah Antrian!',
-      uuid: response.uuid,
-    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Internal Server Error', error });
@@ -81,6 +100,7 @@ export const getQueuePrioritas = async (req, res) => {
           [Op.or]: ['menunggu', 'proses'],
         },
       },
+      order: [['createdAt', 'ASC']],
     });
 
     return res.status(200).json({ response });
