@@ -56,9 +56,11 @@ const Queue = db.define(
     },
     color: {
       type: DataTypes.STRING,
+      allowNull: true,
     },
     date: {
       type: DataTypes.DATE,
+      allowNull: true,
     },
   },
   {

@@ -116,7 +116,22 @@ export const getStatistikQueue = async (req, res) => {
         jenis_layanan: 'pembuatan kartu keluarga',
       },
     });
-    const { count: layanan_lainnya } = await Queue.findAndCountAll({
+    const { count: pelayanan_kk_ktp } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'pelayanan kartu keluarga/ktp',
+      },
+    });
+    const { count: kia } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'kia',
+      },
+    });
+    const { count: skpwni } = await Queue.findAndCountAll({
+      where: {
+        jenis_layanan: 'skpwni',
+      },
+    });
+    const { count: perekaman } = await Queue.findAndCountAll({
       where: {
         jenis_layanan: 'layanan lainnya',
       },
@@ -129,7 +144,10 @@ export const getStatistikQueue = async (req, res) => {
       akta_kelahiran,
       akta_kematian,
       kk,
-      layanan_lainnya,
+      pelayanan_kk_ktp,
+      kia,
+      skpwni,
+      perekaman,
     });
   } catch (error) {
     console.log(error);
@@ -156,6 +174,9 @@ export const updateStatus = async (req, res) => {
   const { id } = req.params;
 
   const queue = await Queue.findByPk(id);
+  if (!queue) {
+    return res.status(404).json({ message: 'Antrian tidak ditemukan!' });
+  }
   try {
     await queue.update({
       status,
@@ -165,6 +186,7 @@ export const updateStatus = async (req, res) => {
       .status(200)
       .json({ message: 'Berhasil Mengupdate Status Antrian!' });
   } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 };

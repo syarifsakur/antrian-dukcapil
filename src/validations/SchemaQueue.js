@@ -14,11 +14,14 @@ const queueSchema = z.object({
       'pembuatan kartu keluarga',
       'akta kelahiran',
       'akta kematian',
-      'layanan lainnya',
+      'pelayanan kartu keluarga/ktp',
+      'kia',
+      'skpwni',
+      'perekaman',
     ],
     {
       message:
-        "Kategori harus 'pembuatan ktp','pembuatan kartu keluarga','akta kelahiran','akta kematian', atau 'layanan lainnya',",
+        "Kategori harus 'pembuatan ktp','pembuatan kartu keluarga','akta kelahiran','akta kematian','kia','skpwni','perekaman atau 'pelayanan kartu keluarga/ktp'",
     }
   ),
 });
