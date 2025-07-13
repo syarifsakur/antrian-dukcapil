@@ -19,6 +19,10 @@ export const createQueue = async (req, res) => {
         color: '#ffff',
         date: new Date(),
       });
+      return res.status(201).json({
+        message: 'Berhasil Menambah Antrian!',
+        uuid: response.uuid,
+      });
     } else {
       if (!reason) {
         return res.status(400).json({ message: 'Alasan harus ada!' });
