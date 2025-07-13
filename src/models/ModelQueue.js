@@ -55,6 +55,14 @@ const Queue = db.define(
       type: DataTypes.ENUM('perubahan data', 'rusak', 'hilang', 'luar daerah'),
       allowNull: true,
     },
+    color: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    date:{
+      type: DataTypes.DATE,
+      allowNull: true,
+    }
   },
   {
     freezeTableName: true,

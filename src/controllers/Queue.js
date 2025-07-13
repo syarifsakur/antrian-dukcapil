@@ -12,6 +12,8 @@ export const createQueue = async (req, res) => {
         telepon,
         kategori,
         jenis_layanan,
+        color:'#ffffff',
+        date: new Date(),
       });
 
       return res.status(201).json({ message: 'Berhasil Menambah Antrian!' });
@@ -36,6 +38,8 @@ export const createQueue = async (req, res) => {
         kategori,
         jenis_layanan,
         reason,
+        color: '#292794',
+        date: new Date(),
       });
     }
     return res.status(201).json({ message: 'Berhasil Menambah Antrian!' });
