@@ -63,6 +63,7 @@ export const getQueueUmum = async (req, res) => {
           [Op.or]: ['menunggu', 'proses'],
         },
       },
+      order: [['createdAt', 'ASC']],
     });
 
     return res.status(200).json({ response });
