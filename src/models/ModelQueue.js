@@ -44,7 +44,10 @@ const Queue = db.define(
         'pembuatan kartu keluarga',
         'akta kelahiran',
         'akta kematian',
-        'layanan lainnya'
+        'pelayanan kartu keluarga/ktp',
+        'kia',
+        'skpwni',
+        'perekaman'
       ),
       allowNull: true,
     },

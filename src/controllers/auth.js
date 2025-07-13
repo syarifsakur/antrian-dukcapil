@@ -23,15 +23,11 @@ export const Login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Cari user berdasarkan username
     const user = await Admin.findOne({ where: { username } });
 
-    // Validasi jika user tidak ditemukan
     if (!user) {
       return res.status(404).json({ message: 'Username tidak ditemukan!' });
     }
-
-    // Bandingkan password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Password salah!' });
