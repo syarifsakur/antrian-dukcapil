@@ -2,35 +2,35 @@ import Queue from '../models/ModelQueue.js';
 import { Op } from 'sequelize';
 
 export const createQueue = async (req, res) => {
-  const { nama, nik, alamat, telepon, kategori, jenis_layanan } = req.body;
+  const { nama, nik, alamat, telepon, kategori, jenis_layanan, reason } =
+    req.body;
   try {
+    let response;
+
     if (jenis_layanan !== 'pembuatan ktp') {
-      Queue.create({
+      response = await Queue.create({
         nama,
         nik,
         alamat,
         telepon,
         kategori,
         jenis_layanan,
-        color:'#ffffff',
+        color: '#292794',
         date: new Date(),
       });
-
-      return res.status(201).json({ message: 'Berhasil Menambah Antrian!' });
     } else {
-      const { reason } = req.body;
       if (!reason) {
-        return res.status(400).json({ message: 'alasan harus ada!' });
+        return res.status(400).json({ message: 'Alasan harus ada!' });
       }
       if (
         !['perubahan data', 'rusak', 'hilang', 'luar daerah'].includes(reason)
       ) {
         return res.status(400).json({
           message:
-            "alasan harus antara 'perubahan data', 'rusak', 'hilang', 'luar daerah'",
+            "Alasan harus antara 'perubahan data', 'rusak', 'hilang', 'luar daerah'",
         });
       }
-      Queue.create({
+      response = await Queue.create({
         nama,
         nik,
         alamat,
@@ -42,9 +42,15 @@ export const createQueue = async (req, res) => {
         date: new Date(),
       });
     }
-    return res.status(201).json({ message: 'Berhasil Menambah Antrian!' });
+
+    console.log(response.uuid);
+    return res.status(201).json({
+      message: 'Berhasil Menambah Antrian!',
+      uuid: response.uuid,
+    });
   } catch (error) {
-    return res.status(500).json(error);
+    console.log(error);
+    return res.status(500).json({ message: 'Internal Server Error', error });
   }
 };
 
