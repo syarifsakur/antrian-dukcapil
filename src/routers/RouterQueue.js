@@ -3,6 +3,7 @@ import validateData from '../middlewares/validation.js';
 import {
   createQueue,
   deleteQueue,
+  getQueue,
   getQueuePrioritas,
   getQueueUmum,
   getStatistikQueue,
@@ -14,6 +15,7 @@ import { queueSchema } from '../validations/SchemaQueue.js';
 
 const router = express.Router();
 
+router.get('/', getQueue);
 router.get('/umum', getQueueUmum);
 router.get('/prioritas', getQueuePrioritas);
 router.get('/riwayat', riwayatQueue);

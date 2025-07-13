@@ -73,6 +73,23 @@ export const createQueue = async (req, res) => {
   }
 };
 
+export const getQueue = async (req, res) => {
+  try {
+    const response = await Queue.findAll({
+      where: {
+        status: {
+          [Op.or]: ['menunggu', 'proses'],
+        },
+      },
+      order: [['createdAt', 'ASC']],
+    });
+
+    return res.status(200).json({ response });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+
 export const getQueueUmum = async (req, res) => {
   try {
     const response = await Queue.findAll({
