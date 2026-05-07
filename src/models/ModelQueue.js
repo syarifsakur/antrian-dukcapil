@@ -62,6 +62,10 @@ const Queue = db.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    estimated_time: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     freezeTableName: true,

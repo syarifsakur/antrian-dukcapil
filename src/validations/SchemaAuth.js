@@ -1,26 +1,25 @@
 import { z } from 'zod';
 
-const queueSchema = z.object({
-  nama: z.string().min(1, { message: 'Nama harus diisi' }),
-  nik: z.string().length(16, { message: 'NIK harus terdiri dari 16 karakter' }),
-  alamat: z.string().min(1, { message: 'Alamat harus diisi' }),
-  telepon: z.string().min(1, 'NO HP Harus di isi!'),
-  kategori: z.enum(['prioritas', 'umum'], {
-    message: "Kategori harus 'prioritas' atau 'umum'",
-  }),
-  jenis_layanan: z.enum(
-    [
-      'pembuatan ktp',
-      'pembuatan kartu keluarga',
-      'akta kelahiran',
-      'akta kematian',
-      'layanan lainnya',
-    ],
-    {
-      message:
-        "Kategori harus 'pembuatan ktp','pembuatan kartu keluarga','akta kelahiran','akta kematian', atau 'layanan lainnya',",
-    }
-  ),
+const loginSchema = z.object({
+  username: z.string().min(1, 'Inputan tidak boleh kosong!'),
+  password: z.string().nonempty({ message: 'Inputan tidak boleh kosong!' }),
 });
 
-export { queueSchema };
+const passwordRequirements = z
+  .string()
+  .min(8, 'Password minimal 8 karakter')
+  .nonempty('Inputan tidak boleh kosong')
+  .refine((val) => /[A-Z]/.test(val), {
+    message: 'Password harus mengandung huruf besar',
+  })
+  .refine((val) => /[a-z]/.test(val), {
+    message: 'Password harus mengandung huruf kecil',
+  })
+  .refine((val) => /\d/.test(val), {
+    message: 'Password harus mengandung angka',
+  })
+  .refine((val) => /[!@#$%^&*(),.?":{}|<>]/.test(val), {
+    message: 'Password harus mengandung karakter khusus',
+  });
+
+export { loginSchema,passwordRequirements };

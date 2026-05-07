@@ -2,31 +2,44 @@ import { date } from 'zod/v4';
 import Queue from '../models/ModelQueue.js';
 import { Op } from 'sequelize';
 
+
+const getEstimasiFuzzy = ({ totalAntrian, jenis_layanan, reason }) => {
+  let score = 0;
+
+  // fuzzy jumlah antrian
+  if (totalAntrian <= 5) score += 10;        // sepi
+  else if (totalAntrian <= 15) score += 25;  // sedang
+  else score += 45;                          // ramai
+
+  // fuzzy jenis layanan
+  if (jenis_layanan === 'pembuatan ktp') score += 20;
+  else score += 10;
+
+  // fuzzy alasan
+  if (reason === 'hilang') score += 25;
+  else if (reason === 'rusak') score += 20;
+  else if (reason === 'luar daerah') score += 15;
+  else if (reason === 'perubahan data') score += 10;
+
+  // hasil estimasi menit
+  if (score >= 70) return 35;
+  if (score >= 50) return 20;
+  if (score >= 30) return 10;
+  return 5;
+};
+
 export const createQueue = async (req, res) => {
   const { nama, nik, alamat, telepon, kategori, jenis_layanan, reason } =
     req.body;
+
   try {
     let response;
 
-    if (jenis_layanan !== 'pembuatan ktp') {
-      response = await Queue.create({
-        nama,
-        nik,
-        alamat,
-        telepon,
-        kategori,
-        jenis_layanan,
-        color: '#ffff',
-        date: new Date(),
-      });
-      return res.status(201).json({
-        message: 'Berhasil Menambah Antrian!',
-        uuid: response.uuid,
-      });
-    } else {
+    if (jenis_layanan === 'pembuatan ktp') {
       if (!reason) {
         return res.status(400).json({ message: 'Alasan harus ada!' });
       }
+
       if (
         !['perubahan data', 'rusak', 'hilang', 'luar daerah'].includes(reason)
       ) {
@@ -35,45 +48,46 @@ export const createQueue = async (req, res) => {
             "Alasan harus antara 'perubahan data', 'rusak', 'hilang', 'luar daerah'",
         });
       }
-      if (reason === 'perubahan data') {
-        response = await Queue.create({
-          nama,
-          nik,
-          alamat,
-          telepon,
-          kategori,
-          jenis_layanan,
-          reason,
-          color: '#ffffff',
-          date: new Date(),
-        });
-        return res.status(201).json({
-          message: 'Berhasil Menambah Antrian!',
-          uuid: response.uuid,
-        });
-      } else {
-        response = await Queue.create({
-          nama,
-          nik,
-          alamat,
-          telepon,
-          kategori,
-          jenis_layanan,
-          reason,
-          color: '#292794',
-          date: new Date(),
-        });
-      }
-
-      console.log(response.uuid);
-      return res.status(201).json({
-        message: 'Berhasil Menambah Antrian!',
-        uuid: response.uuid,
-      });
     }
+
+    const totalAntrian = await Queue.count();
+
+    const estimasi_waktu = getEstimasiFuzzy({
+      totalAntrian,
+      jenis_layanan,
+      reason,
+    });
+
+    const color =
+      jenis_layanan === 'pembuatan ktp' &&
+      reason !== 'perubahan data'
+        ? '#292794'
+        : '#ffffff';
+
+    response = await Queue.create({
+      nama,
+      nik,
+      alamat,
+      telepon,
+      kategori,
+      jenis_layanan,
+      reason: jenis_layanan === 'pembuatan ktp' ? reason : null,
+      color,
+      estimated_time: estimasi_waktu + " Menit",
+      date: new Date(),
+    });
+
+    return res.status(201).json({
+      message: 'Berhasil Menambah Antrian!',
+      uuid: response.uuid,
+      estimated_time: `${estimasi_waktu} menit`,
+    });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Internal Server Error', error });
+    return res.status(500).json({
+      message: 'Internal Server Error',
+      error,
+    });
   }
 };
 
